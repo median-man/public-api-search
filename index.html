@@ -8,15 +8,29 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-  <title>Hello, world!</title>
+  <title>Public APIs</title>
 </head>
 
 <body>
-  <h1>Hello, world!</h1>
+  <div id="wrapper" class="container">
+    <h1>Search for Public APIs</h1>
+    <p>This list contains the entries for APIs reported to support HTTPS and CORS found at <a
+        href="https://github.com/public-apis/public-apis">Public APIs</a></p>
+    <div id="error-view" class="d-none">
+      <div class="alert alert-danger" role="alert">
+        Unable to download API data. Try visiting the GitHub project for Public APIs linked above or try back later.
+      </div>
+    </div>
+    <div id="table-view" class="table-responsive"></div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
     crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/2.0.1/remarkable.min.js"
+    integrity="sha512-skYYbQHAuOTpeJTthhUH3flZohep8blA+qjZOY0VqmfXMDiYcWxu29F5UbxU4LxaIpGkRBk+3Qf8qaXfd9jngg=="
+    crossorigin="anonymous"></script>
+  <script type="module" src="./js/app.js"></script>
 </body>
 
 </html>
