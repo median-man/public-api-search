@@ -12,15 +12,26 @@ const createEntryFromRowEl = (row) => {
 };
 
 const createApiCollection = (entries) => {
+  const searchEntry = (search) => (entry) => {
+    return Object.entries(entry)
+      .filter(([key]) => key !== "row" && key !== "url")
+      .map(([, value]) => value.toLowerCase())
+      .some((value) => value.includes(search));
+  };
+  const find = ({ cors, https, search }) => {
+    let result = entries.filter((entry) => {
+      if (cors && entry.cors !== "Yes") return false;
+      if (https && entry.https !== "Yes") return false;
+      return true;
+    });
+    if (search) {
+      result = result.filter(searchEntry(search));
+    }
+    return result;
+  };
   return {
     all: () => [...entries],
-    find: (entries, { cors, https }) => {
-      return entries.filter((entry) => {
-        if (cors && entry.cors !== "Yes") return false;
-        if (https && entry.https !== "Yes") return false;
-        return true;
-      });
-    },
+    find,
   };
 };
 

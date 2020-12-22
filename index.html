@@ -12,19 +12,24 @@
 </head>
 
 <body>
-  <div id="wrapper" class="container">
+  <div id="wrapper" class="container pt-5">
     <h1>Search for Public APIs</h1>
     <p>This list contains the entries for APIs reported to support HTTPS and CORS found at <a
         href="https://github.com/public-apis/public-apis">Public APIs</a></p>
-
-    <div class="mb-3">
-      <p>Use toggle buttons to filter the table.</p>
-      
-      <div id="table-filters" class="btn-group" role="group" aria-label="Choose filters to apply to the table.">
-        <input type="checkbox" class="btn-check" id="cors-toggle" autocomplete="off">
-        <label class="btn btn-outline-primary" for="cors-toggle">CORS</label>
-        <input type="checkbox" class="btn-check" id="https-toggle" autocomplete="off">
-        <label class="btn btn-outline-primary" for="https-toggle">HTTPS</label>
+    <hr class="my-4">
+    <p>Use toggle buttons and search box to filter the table.</p>
+    <div class="mb-3 row">
+      <div class="col-md-3">
+        <div id="table-buttons" class="btn-group" role="group" aria-label="Choose filters to apply to the table.">
+          <input type="checkbox" class="btn-check" id="cors-toggle" autocomplete="off">
+          <label class="btn btn-outline-primary" for="cors-toggle">CORS</label>
+          <input type="checkbox" class="btn-check" id="https-toggle" autocomplete="off">
+          <label class="btn btn-outline-primary" for="https-toggle">HTTPS</label>
+        </div>
+      </div>
+      <div class="col-md">
+        <input id="search-input" class="form-control d-inline-block" type="text" placeholder="search"
+          aria-label="Search table">
       </div>
     </div>
 
