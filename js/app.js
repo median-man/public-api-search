@@ -19,24 +19,31 @@ function renderTable({ entries, tableView }) {
   table.append(tbody);
   tableView.innerHTML = "";
   tableView.append(table);
-};
+}
 
 async function main() {
   const collection = await fetchApiCollection();
   const corsToggle = document.querySelector("#cors-toggle");
   const errorView = document.querySelector("#error-view");
   const httpsToggle = document.querySelector("#https-toggle");
-  const tableFilters = document.querySelector("#table-filters");
+  const searchInput = document.querySelector("#search-input");
+  const tableButtons = document.querySelector("#table-buttons");
   const tableView = document.getElementById("table-view");
+  const filterEntries = () => {
+    return collection.find({
+      cors: corsToggle.checked,
+      https: httpsToggle.checked,
+      search: searchInput.value.trim(),
+    });
+  };
   if (collection) {
     const entries = collection.all();
     renderTable({ tableView, entries });
-    tableFilters.addEventListener("change", () => {
-      const filteredEntries = collection.find(entries, {
-        cors: corsToggle.checked,
-        https: httpsToggle.checked,
-      });
-      renderTable({tableView, entries: filteredEntries});
+    tableButtons.addEventListener("change", () => {
+      renderTable({ tableView, entries: filterEntries() });
+    });
+    searchInput.addEventListener("input", () => {
+      renderTable({ tableView, entries: filterEntries() });
     });
   } else {
     errorView.classList.remove("d-none");
