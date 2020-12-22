@@ -14,6 +14,13 @@ const createEntryFromRowEl = (row) => {
 const createApiCollection = (entries) => {
   return {
     all: () => [...entries],
+    find: (entries, { cors, https }) => {
+      return entries.filter((entry) => {
+        if (cors && entry.cors !== "Yes") return false;
+        if (https && entry.https !== "Yes") return false;
+        return true;
+      });
+    },
   };
 };
 
