@@ -1,14 +1,21 @@
 const createEntryFromRowEl = (row) => {
   const tds = row.children;
-  return {
-    title: tds[0].textContent,
-    url: tds[0].firstElementChild.getAttribute("href"),
-    description: tds[1].textContent,
-    auth: tds[2].textContent,
-    https: tds[3].textContent,
-    cors: tds[4].textContent,
-    row,
-  };
+  const entry = {};
+
+  entry.auth = tds[2].textContent;
+  entry.cors = tds[4].textContent;
+  entry.description = tds[1].textContent;
+  entry.https = tds[3].textContent;
+  entry.row = row;
+  entry.title = tds[0].textContent;
+  entry.url = tds[0].firstElementChild.getAttribute("href");
+
+  // add category td cell after parsing data to avoid shifting the indexes.
+  const categoryTd = document.createElement("td");
+  entry.category = row.closest("table").previousElementSibling.textContent;
+  categoryTd.textContent = entry.category;
+  row.insertBefore(categoryTd, tds[1]);
+  return entry;
 };
 
 const createApiCollection = (entries) => {
@@ -46,9 +53,8 @@ const parseMarkdown = (str) => {
 };
 
 export const fetchApiCollection = async () => {
-  const url = new URL(
-    "https://raw.githubusercontent.com/public-apis/public-apis/master/README.md"
-  );
+  const url =
+    "https://raw.githubusercontent.com/public-apis/public-apis/master/README.md";
   try {
     const response = await fetch(url);
     if (!response.ok) {

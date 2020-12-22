@@ -5,13 +5,14 @@ function renderTable({ entries, tableView }) {
   table.classList.add("table");
   table.innerHTML = `
     <thead>
-    <tr>
-    <th>API</th>
-    <th>Description</th>
-    <th>Auth</th>
-    <th>HTTPS</th>
-    <th>CORS</th>
-    </tr>
+      <tr>
+        <th>API</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Auth</th>
+        <th>HTTPS</th>
+        <th>CORS</th>
+      </tr>
     </thead>`;
 
   const tbody = document.createElement("tbody");
