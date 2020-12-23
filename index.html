@@ -19,26 +19,32 @@
     <hr class="my-4">
     <p>Use toggle buttons and search box to filter the table.</p>
     <div class="mb-3 row">
+      <!-- all controls initially disabled while data is fetched via ajax -->
       <div class="col-md-3">
         <div id="table-buttons" class="btn-group" role="group" aria-label="Choose filters to apply to the table.">
-          <input type="checkbox" class="btn-check" id="cors-toggle">
+          <input type="checkbox" class="btn-check" id="cors-toggle" disabled>
           <label class="btn btn-outline-primary" for="cors-toggle">CORS</label>
-          <input type="checkbox" class="btn-check" id="https-toggle">
+          <input type="checkbox" class="btn-check" id="https-toggle" disabled>
           <label class="btn btn-outline-primary" for="https-toggle">HTTPS</label>
         </div>
       </div>
       <div class="col-md">
         <input id="search-input" class="form-control d-inline-block" type="text" placeholder="search"
-          aria-label="Search table">
+          aria-label="Search table" disabled>
       </div>
     </div>
-
+    <div id="loader" class="d-flex flex-column align-items-center justify-content-center pt-5">
+      <p>Searching for APIs...</p>
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
     <div id="error-view" class="d-none">
       <div class="alert alert-danger" role="alert">
         Unable to download API data. Try visiting the GitHub project for Public APIs linked above or try back later.
       </div>
     </div>
-    <div id="table-view" class="table-responsive"></div>
+    <div id="table-view" class="table-responsive d-none"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
