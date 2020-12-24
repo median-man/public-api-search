@@ -1,3 +1,10 @@
+const favoriteEntryTitles = new Set(
+  JSON.parse(localStorage.getItem("favorites")) || []
+);
+
+const saveFavoriteTitles = () =>
+  localStorage.setItem("favorites", JSON.stringify([...favoriteEntryTitles]));
+
 const createEntryFromRowEl = (row) => {
   const tds = row.children;
   const entry = {};
@@ -6,15 +13,10 @@ const createEntryFromRowEl = (row) => {
   entry.cors = tds[4].textContent;
   entry.description = tds[1].textContent;
   entry.https = tds[3].textContent;
-  entry.row = row;
   entry.title = tds[0].textContent;
   entry.url = tds[0].firstElementChild.getAttribute("href");
-
-  // add category td cell after parsing data to avoid shifting the indexes.
-  const categoryTd = document.createElement("td");
   entry.category = row.closest("table").previousElementSibling.textContent;
-  categoryTd.textContent = entry.category;
-  row.insertBefore(categoryTd, tds[1]);
+  entry.isFavorite = favoriteEntryTitles.has(entry.title);
   return entry;
 };
 
@@ -25,20 +27,35 @@ const createApiCollection = (entries) => {
       .map(([, value]) => value.toLowerCase())
       .some((value) => value.includes(search));
   };
-  const find = ({ cors, https, search }) => {
+  const find = ({ cors, https, search, title }) => {
     let result = entries.filter((entry) => {
       if (cors && entry.cors !== "Yes") return false;
       if (https && entry.https !== "Yes") return false;
       return true;
     });
+    if (title) {
+      result = entries.filter((entry) => entry.title === title);
+    }
     if (search) {
       result = result.filter(searchEntry(search));
     }
     return result;
   };
+  const toggleFavorite = (entryTitle) => {
+    const [entry] = find({ title: entryTitle });
+    entry.isFavorite = !entry.isFavorite;
+    if (entry.isFavorite) {
+      favoriteEntryTitles.add(entry.title);
+    } else {
+      favoriteEntryTitles.delete(entry.title);
+    }
+    saveFavoriteTitles();
+    return entry.isFavorite;
+  };
   return {
     all: () => [...entries],
     find,
+    toggleFavorite,
   };
 };
 

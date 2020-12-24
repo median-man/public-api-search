@@ -1,4 +1,5 @@
 import { fetchApiCollection } from "./api_collection.js";
+import { biStar, biStarFill } from "./icons.js";
 
 function renderTable({ entries, tableView }) {
   const table = document.createElement("table");
@@ -6,6 +7,7 @@ function renderTable({ entries, tableView }) {
   table.innerHTML = `
     <thead>
       <tr>
+        <th></th>
         <th>API</th>
         <th>Category</th>
         <th>Description</th>
@@ -16,7 +18,24 @@ function renderTable({ entries, tableView }) {
     </thead>`;
 
   const tbody = document.createElement("tbody");
-  tbody.append(...entries.map((entry) => entry.row));
+  const rows = entries.map((entry) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>
+        <span data-entryTitle="${entry.title}" class="favorite">
+          ${entry.isFavorite ? biStarFill() : biStar()}
+        </span>
+      </td>
+      <td><a href="${entry.url}">${entry.title}</a></td>
+      <td>${entry.category}</td>
+      <td>${entry.description}</td>
+      <td>${entry.auth}</td>
+      <td>${entry.https}</td>
+      <td>${entry.cors}</td>
+    `;
+    return tr;
+  });
+  tbody.append(...rows);
   table.append(tbody);
   tableView.innerHTML = "";
   tableView.append(table);
@@ -61,6 +80,16 @@ async function main() {
     searchInput.addEventListener("input", () => {
       renderTable({ tableView, entries: filterEntries() });
     });
+
+    const handleToggleFavorite = (event) => {
+      const favoriteStar = event.target.closest(".favorite");
+      if (favoriteStar) {
+        const entryTitle = favoriteStar.getAttribute("data-entryTitle");
+        collection.toggleFavorite(entryTitle);
+        renderTable({ tableView, entries: filterEntries() });
+      }
+    };
+    document.addEventListener("click", handleToggleFavorite);
   } else {
     errorView.classList.remove("d-none");
   }
