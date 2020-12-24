@@ -1,4 +1,5 @@
 import { fetchApiCollection } from "./api_collection.js";
+import { debounce } from "./util.js";
 import {
   enableTableControls,
   getTableState,
@@ -45,7 +46,7 @@ async function main() {
 
     initTable({
       entries,
-      onChange: filterEntries,
+      onChange: debounce(filterEntries, 120),
       onFavoriteChange: handleFavoriteChange,
     });
   } else {
