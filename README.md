@@ -12,6 +12,8 @@ Use the toggle buttons for `CORS` and `HTTPS` to filter out APIs that are not re
 
 You can filter the displayed results based on query by entering a search term in the input box.
 
+Click on the star icon next to an API to add it to your favorites and use the `Favorites` toggle button to filter the table to show only APIs you have marked. Favorites are saved locally in your browser. Your saved favorites will not appear if you open the page on another browser/device.
+
 ## Bugs/Suggestions
 
 Please feel free to open an issue if you have suggestions or wish to report a bug. Keep in mind that the data for the APIs is sourced from a third party project. If the data about an API is incorrect, head over to [Public APIs](https://github.com/public-apis/public-apis). All data for this page is sourced from the README.md file.
