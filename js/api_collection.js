@@ -23,7 +23,7 @@ const createEntryFromRowEl = (row) => {
 const createApiCollection = (entries) => {
   const searchEntry = (search) => (entry) => {
     return Object.entries(entry)
-      .filter(([key]) => key !== "row" && key !== "url")
+      .filter(([, value]) => typeof value === "string")
       .map(([, value]) => value.toLowerCase())
       .some((value) => value.includes(search));
   };
