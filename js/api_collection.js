@@ -27,10 +27,11 @@ const createApiCollection = (entries) => {
       .map(([, value]) => value.toLowerCase())
       .some((value) => value.includes(search));
   };
-  const find = ({ cors, https, search, title }) => {
+  const find = ({ cors, https, isFavorite, search, title }) => {
     let result = entries.filter((entry) => {
       if (cors && entry.cors !== "Yes") return false;
       if (https && entry.https !== "Yes") return false;
+      if (isFavorite && !entry.isFavorite) return false; 
       return true;
     });
     if (title) {

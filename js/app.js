@@ -45,6 +45,7 @@ async function main() {
   const pageLoadAt = Date.now();
   const corsToggle = document.querySelector("#cors-toggle");
   const errorView = document.querySelector("#error-view");
+  const favoritesToggle = document.querySelector("#favorites-toggle");
   const httpsToggle = document.querySelector("#https-toggle");
   const loader = document.querySelector("#loader");
   const searchInput = document.querySelector("#search-input");
@@ -53,6 +54,7 @@ async function main() {
   const filterEntries = () => {
     return collection.find({
       cors: corsToggle.checked,
+      isFavorite: favoritesToggle.checked,
       https: httpsToggle.checked,
       search: searchInput.value.trim(),
     });
@@ -69,6 +71,7 @@ async function main() {
       tableView.classList.remove("d-none");
       loader.classList.add("d-none");
       corsToggle.disabled = false;
+      favoritesToggle.disabled = false;
       httpsToggle.disabled = false;
       searchInput.disabled = false;
       // use parens due to 1000 - Date.now() producing unsafe number
@@ -81,7 +84,7 @@ async function main() {
       renderTable({ tableView, entries: filterEntries() });
     });
 
-    const handleToggleFavorite = (event) => {
+    const handleFavoriteClick = (event) => {
       const favoriteStar = event.target.closest(".favorite");
       if (favoriteStar) {
         const entryTitle = favoriteStar.getAttribute("data-entryTitle");
@@ -89,7 +92,7 @@ async function main() {
         renderTable({ tableView, entries: filterEntries() });
       }
     };
-    document.addEventListener("click", handleToggleFavorite);
+    document.addEventListener("click", handleFavoriteClick);
   } else {
     errorView.classList.remove("d-none");
   }
