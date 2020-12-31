@@ -12,6 +12,17 @@ async function main() {
   const pageLoadAt = Date.now();
   const errorView = document.querySelector("#error-view");
   const loader = document.querySelector("#loader");
+  const topButton = document.querySelector("#top-button");
+
+  const updateTopButton = () => {
+    if (window.scrollY > window.innerHeight * 1.3) {
+      topButton.style.opacity = 0.8;
+    } else {
+      topButton.style.opacity = 0;
+    }
+  };
+
+  document.addEventListener("scroll", debounce(updateTopButton, 50));
 
   const collection = await fetchApiCollection();
 
