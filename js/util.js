@@ -1,5 +1,7 @@
-export const debounce =  (cb, timeoutMs) => (...args) => {
+export const debounce = (cb, timeoutMs) => {
   let timerId;
-  clearTimeout(timerId);
-  timerId = setTimeout(() => cb(...args), timeoutMs);
+  return (...args) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => cb(...args), timeoutMs);
+  };
 };
