@@ -16,12 +16,30 @@ let state = { ...defaultState };
 const subscribers = [];
 
 // Reads query and returns current page state object.
-const getState = () => state;
+const getState = () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const cors = searchParams.get("filters")?.includes("cors") || false;
+  const https = searchParams.get("filters")?.includes("https") || false;
+  const search = searchParams.get("search") || "";
+  return { ...state, cors, https, search };
+};
 
 // Accepts a patch object which is used to update state. Calls all subscribers
 // to state with current state.
 const updateState = (patch) => {
   state = { ...state, ...patch };
+  const { cors, https, favorites, search } = state;
+  const searchParams = new URLSearchParams();
+  const filters = [cors && "cors", https && "https"]
+    .filter((toggle) => toggle)
+    .join(",");
+  if (filters.length) {
+    searchParams.append("filters", filters);
+  }
+  if (search) {
+    searchParams.append("search", search);
+  }
+  window.location.search = searchParams;
 };
 
 // #TODO
