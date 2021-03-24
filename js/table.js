@@ -57,13 +57,20 @@ const getTableState = () => ({
   search: searchInput.value.trim(),
 });
 
-const initTable = ({ entries, onFavoriteChange, onChange }) => {
+const initTable = ({ entries, onFavoriteChange, onChange, initialState }) => {
   corsToggle = document.querySelector("#cors-toggle");
   favoritesToggle = document.querySelector("#favorites-toggle");
   httpsToggle = document.querySelector("#https-toggle");
   searchInput = document.querySelector("#search-input");
   tableButtons = document.querySelector("#table-buttons");
   tableView = document.getElementById("table-view");
+
+  // set initial values for toggles/search
+  const { cors, favorites, https, search } = initialState;
+  corsToggle.checked = cors;
+  favoritesToggle.checked = favorites;
+  httpsToggle.checked = https;
+  searchInput.value = search;
 
   tableButtons.addEventListener("change", onChange);
   searchInput.addEventListener("input", onChange);

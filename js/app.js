@@ -7,12 +7,14 @@ import {
   setTableEntries,
   showTable,
 } from "./table.js";
+import PageState from "./page_state.js";
 
 async function main() {
   const pageLoadAt = Date.now();
   const errorView = document.querySelector("#error-view");
   const loader = document.querySelector("#loader");
   const topButton = document.querySelector("#top-button");
+  const collectionPromise = fetchApiCollection();
 
   const updateTopButton = () => {
     if (window.scrollY > window.innerHeight * 1.3) {
@@ -24,22 +26,20 @@ async function main() {
 
   document.addEventListener("scroll", debounce(updateTopButton, 50));
 
-  const collection = await fetchApiCollection();
+  const collection = await collectionPromise;
 
   const filterEntries = () => {
-    const { cors, favorites, https, search } = getTableState();
+    const { cors, favorites, https, search } = PageState.getState();
     const entries = collection.find({
       cors,
       https,
       isFavorite: favorites,
       search,
     });
-    setTableEntries(entries);
+    return entries;
   };
 
   if (collection) {
-    const entries = collection.all();
-
     // use timeout to prevent flash of loader which appears as a bug to the
     // observant user
     const MIN_LOADER_TIME = 500;
@@ -55,9 +55,15 @@ async function main() {
       filterEntries();
     };
 
+    const handleTableChange = debounce(() => {
+      PageState.updateState(getTableState());
+      setTableEntries(filterEntries());
+    }, 120);
+
     initTable({
-      entries,
-      onChange: debounce(filterEntries, 120),
+      initialState: PageState.getState(),
+      entries: filterEntries(),
+      onChange: handleTableChange,
       onFavoriteChange: handleFavoriteChange,
     });
   } else {
