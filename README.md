@@ -20,4 +20,4 @@ Please feel free to open an issue if you have suggestions or wish to report a bu
 
 ## Why did I use the README.md file instead of the REST API provided by Public APIs?
 
-The REST API found [here](https://api.publicapis.org/) does not support cors which means I would have to create a backend and I'm just too lazy for that. If https://api.publicapis.org/ fixes support for CORS then I might update this project to use the REST Api instead of loading and parsing the README.md file.
+The REST API found [here](https://api.publicapis.org/) does not support cors which means I would have to create a backend and I'm just too lazy for that. If https://api.publicapis.org/ fixes support for CORS then I might update this project to use the REST Api instead of loading and parsing the README.md file. UPDATE: It seems the API supports cors now, but I"m going to maintain this project as I still find it useful when working with beginning developers.
