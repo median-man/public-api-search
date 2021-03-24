@@ -42,7 +42,7 @@ async function main() {
 
     // use timeout to prevent flash of loader which appears as a bug to the
     // observant user
-    const MIN_LOADER_TIME = 800;
+    const MIN_LOADER_TIME = 500;
     setTimeout(() => {
       loader.classList.add("d-none");
       enableTableControls();
