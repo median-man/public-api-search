@@ -39,6 +39,14 @@ const updateState = (patch) => {
   if (search) {
     searchParams.append("search", search);
   }
+  // #TODO include param is a csv list of api title that are favorited. State
+  // should probably be amended to include favorites and change current
+  // favorites to be filterFavorites. If filterFavorites is applied, add each
+  // item in favorites to the "include" param. Another approach to consider is
+  // to do away with all the toggles and just make a single param "include"
+  // which is a csv of all the api names to display. These will often be very
+  // long. IMPORTANT: Further research about size limitations on the url is
+  // required.
   window.location.search = searchParams;
 };
 
