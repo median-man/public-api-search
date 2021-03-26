@@ -9,7 +9,6 @@ import {
 } from "./table.js";
 
 async function main() {
-  const pageLoadAt = Date.now();
   const errorView = document.querySelector("#error-view");
   const loader = document.querySelector("#loader");
   const topButton = document.querySelector("#top-button");
@@ -40,16 +39,6 @@ async function main() {
   if (collection) {
     const entries = collection.all();
 
-    // use timeout to prevent flash of loader which appears as a bug to the
-    // observant user
-    const MIN_LOADER_TIME = 800;
-    setTimeout(() => {
-      loader.classList.add("d-none");
-      enableTableControls();
-      showTable();
-      // use parens due to MIN_LOADER_TIME - Date.now() producing unsafe number
-    }, MIN_LOADER_TIME - (Date.now() - pageLoadAt));
-
     const handleFavoriteChange = (entryTitle) => {
       collection.toggleFavorite(entryTitle);
       filterEntries();
@@ -60,6 +49,9 @@ async function main() {
       onChange: debounce(filterEntries, 120),
       onFavoriteChange: handleFavoriteChange,
     });
+    enableTableControls();
+    showTable();
+    loader.classList.add("d-none");
   } else {
     errorView.classList.remove("d-none");
   }
