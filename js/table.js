@@ -1,4 +1,5 @@
 import { biStar, biStarFill } from "./icons.js";
+import { prefersDarkTheme } from "./util.js";
 
 let corsToggle;
 let favoritesToggle;
@@ -45,6 +46,9 @@ const bodyHTML = (entries) => `<tbody>${entries.map(rowHTML).join("")}</tbody>`;
 const renderTable = ({ entries, tableView }) => {
   const table = document.createElement("table");
   table.classList.add("table");
+  if (prefersDarkTheme) {
+    table.classList.add("table-dark");
+  }
   table.innerHTML = headerHTML() + bodyHTML(entries);
   tableView.innerHTML = "";
   tableView.append(table);
@@ -90,4 +94,10 @@ const enableTableControls = () => {
 
 const showTable = () => tableView.classList.remove("d-none");
 
-export { initTable, setTableEntries, getTableState, enableTableControls, showTable };
+export {
+  initTable,
+  setTableEntries,
+  getTableState,
+  enableTableControls,
+  showTable,
+};

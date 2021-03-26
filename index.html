@@ -34,6 +34,31 @@
       background-color: #fff;
       transition: opacity 200ms;
     }
+
+    /* bootstrap overrides for dark theme */
+    .bg-dark a {
+        color: var(--bs-info);
+      }
+
+      .bg-dark a:hover {
+        color: #4cdaf6;
+      }
+
+      .bg-dark h1 {
+        color: var(--bs-info);
+      }
+
+      .bg-dark .form-control {
+        border-color: var(--bs-info);
+        background-color: var(--bs-dark);
+        color: var(--light);
+      }
+
+      .bg-dark .form-control::placeholder {
+        color: var(--bs-info);
+        /* opacity < 0.7 does not have enough contrast for AA */
+        opacity: 0.7; 
+      }
   </style>
 </head>
 

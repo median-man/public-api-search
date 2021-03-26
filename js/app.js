@@ -1,5 +1,5 @@
 import { fetchApiCollection } from "./api_collection.js";
-import { debounce } from "./util.js";
+import { debounce, prefersDarkTheme } from "./util.js";
 import {
   enableTableControls,
   getTableState,
@@ -20,6 +20,14 @@ async function main() {
       topButton.style.opacity = 0;
     }
   };
+
+  if (prefersDarkTheme) {
+    document.body.classList.add("bg-dark", "text-light");
+    document.querySelectorAll(".btn-outline-primary").forEach((btn) => {
+      btn.classList.remove("btn-outline-primary");
+      btn.classList.add("btn-outline-info");
+    });
+  }
 
   document.addEventListener("scroll", debounce(updateTopButton, 50));
 
