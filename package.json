@@ -1,0 +1,25 @@
+{
+  "name": "public-api-search",
+  "version": "1.0.0",
+  "description": "This is a web page which loads the README file from [Public APIs](https://github.com/public-apis/public-apis/blob/master/README.md) and renders a table listing the APIs which may be filtered and searched using some simple controls.",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/median-man/public-api-search.git"
+  },
+  "keywords": [],
+  "author": "John Desrosiers <john.desro@gmail.com> (https://github.com/median-man)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/median-man/public-api-search/issues"
+  },
+  "homepage": "https://median-man.github.io/public-api-search/",
+  "devDependencies": {
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.6.0"
+  }
+}
