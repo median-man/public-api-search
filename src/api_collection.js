@@ -1,3 +1,5 @@
+import { Remarkable } from "remarkable";
+
 const favoriteEntryTitles = new Set(
   JSON.parse(localStorage.getItem("favorites")) || []
 );
@@ -31,7 +33,7 @@ const createApiCollection = (entries) => {
     let result = entries.filter((entry) => {
       if (cors && entry.cors !== "Yes") return false;
       if (https && entry.https !== "Yes") return false;
-      if (isFavorite && !entry.isFavorite) return false; 
+      if (isFavorite && !entry.isFavorite) return false;
       return true;
     });
     if (title) {
@@ -63,7 +65,7 @@ const createApiCollection = (entries) => {
 const parseMarkdown = (str) => {
   // create a div to query for rows and create entries from each row
   const page = document.createElement("div");
-  const md = new remarkable.Remarkable();
+  const md = new Remarkable();
   page.innerHTML = md.render(str);
   const rows = page.querySelectorAll("tbody tr");
   const entries = Array.from(rows).map(createEntryFromRowEl);
