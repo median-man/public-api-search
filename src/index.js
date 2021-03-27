@@ -1,3 +1,4 @@
+import "./style.css";
 import { fetchApiCollection } from "./api_collection";
 import { debounce } from "./util";
 import {
