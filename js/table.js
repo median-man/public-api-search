@@ -1,4 +1,5 @@
 import { biStar, biStarFill } from "./icons.js";
+import ThemeToggle from "./theme_toggle.js";
 
 let corsToggle;
 let favoritesToggle;
@@ -6,6 +7,7 @@ let httpsToggle;
 let searchInput;
 let tableButtons;
 let tableView;
+let table;
 
 const headerHTML = () => {
   return `
@@ -42,12 +44,14 @@ const rowHTML = (entry) => {
 
 const bodyHTML = (entries) => `<tbody>${entries.map(rowHTML).join("")}</tbody>`;
 
-const renderTable = ({ entries, tableView }) => {
-  const table = document.createElement("table");
-  table.classList.add("table");
+const applyTheme = () =>
+  ThemeToggle.isDark()
+    ? table.classList.add("table-dark")
+    : table.classList.remove("table-dark");
+
+const renderTable = ({ entries }) => {
+  applyTheme();
   table.innerHTML = headerHTML() + bodyHTML(entries);
-  tableView.innerHTML = "";
-  tableView.append(table);
 };
 
 const getTableState = () => ({
@@ -57,6 +61,14 @@ const getTableState = () => ({
   search: searchInput.value.trim(),
 });
 
+const handleFavoriteClick = (onFavoriteChange) => (event) => {
+  const favoriteStar = event.target.closest(".favorite");
+  if (favoriteStar) {
+    const entryTitle = favoriteStar.getAttribute("data-entryTitle");
+    onFavoriteChange(entryTitle);
+  }
+};
+
 const initTable = ({ entries, onFavoriteChange, onChange }) => {
   corsToggle = document.querySelector("#cors-toggle");
   favoritesToggle = document.querySelector("#favorites-toggle");
@@ -64,22 +76,19 @@ const initTable = ({ entries, onFavoriteChange, onChange }) => {
   searchInput = document.querySelector("#search-input");
   tableButtons = document.querySelector("#table-buttons");
   tableView = document.getElementById("table-view");
+  table = document.createElement("table");
+
+  table.classList.add("table");
+  tableView.append(table);
 
   tableButtons.addEventListener("change", onChange);
   searchInput.addEventListener("input", onChange);
-  document.addEventListener("click", (event) => {
-    const favoriteStar = event.target.closest(".favorite");
-    if (favoriteStar) {
-      const entryTitle = favoriteStar.getAttribute("data-entryTitle");
-      onFavoriteChange(entryTitle);
-    }
-  });
-  renderTable({ tableView, entries });
+  table.addEventListener("click", handleFavoriteClick(onFavoriteChange));
+  ThemeToggle.subscribe(applyTheme);
+  renderTable({ entries });
 };
 
-const setTableEntries = (entries) => {
-  renderTable({ tableView, entries });
-};
+const setTableEntries = (entries) => renderTable({ entries });
 
 const enableTableControls = () => {
   corsToggle.disabled = false;
@@ -90,4 +99,10 @@ const enableTableControls = () => {
 
 const showTable = () => tableView.classList.remove("d-none");
 
-export { initTable, setTableEntries, getTableState, enableTableControls, showTable };
+export {
+  initTable,
+  setTableEntries,
+  getTableState,
+  enableTableControls,
+  showTable,
+};
