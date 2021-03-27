@@ -1,5 +1,5 @@
 import { fetchApiCollection } from "./api_collection.js";
-import { debounce, prefersDarkTheme } from "./util.js";
+import { debounce } from "./util.js";
 import {
   enableTableControls,
   getTableState,
@@ -7,6 +7,7 @@ import {
   setTableEntries,
   showTable,
 } from "./table.js";
+import ThemeToggle from "./theme_toggle.js";
 
 async function main() {
   const errorView = document.querySelector("#error-view");
@@ -21,13 +22,27 @@ async function main() {
     }
   };
 
-  if (prefersDarkTheme) {
+  const applyDarkTheme = () => {
     document.body.classList.add("bg-dark", "text-light");
     document.querySelectorAll(".btn-outline-primary").forEach((btn) => {
       btn.classList.remove("btn-outline-primary");
       btn.classList.add("btn-outline-info");
     });
-  }
+  };
+
+  const applyLightTheme = () => {
+    document.body.classList.remove("bg-dark", "text-light");
+    document.querySelectorAll(".btn-outline-info").forEach((btn) => {
+      btn.classList.add("btn-outline-primary");
+      btn.classList.remove("btn-outline-info");
+    });
+  };
+
+  const handleThemeChange = () =>
+    ThemeToggle.isDark() ? applyDarkTheme() : applyLightTheme();
+
+  ThemeToggle.init(document.querySelector("#wrapper"));
+  ThemeToggle.subscribe(handleThemeChange);
 
   document.addEventListener("scroll", debounce(updateTopButton, 50));
 

@@ -37,33 +37,38 @@
 
     /* bootstrap overrides for dark theme */
     .bg-dark a {
-        color: var(--bs-info);
-      }
+      color: var(--bs-info);
+    }
 
-      .bg-dark a:hover {
-        color: #4cdaf6;
-      }
+    .bg-dark a:hover {
+      color: #4cdaf6;
+    }
 
-      .bg-dark h1 {
-        color: var(--bs-info);
-      }
+    .bg-dark h1 {
+      color: var(--bs-info);
+    }
 
-      .bg-dark .form-control {
-        border-color: var(--bs-info);
-        background-color: var(--bs-dark);
-        color: var(--light);
-      }
+    .bg-dark .form-control {
+      border-color: var(--bs-info);
+      background-color: var(--bs-dark);
+      color: var(--light);
+    }
 
-      .bg-dark .form-control::placeholder {
-        color: var(--bs-info);
-        /* opacity < 0.7 does not have enough contrast for AA */
-        opacity: 0.7; 
-      }
+    .bg-dark .form-control::placeholder {
+      color: var(--bs-info);
+      /* opacity < 0.7 does not have enough contrast for AA */
+      opacity: 0.7; 
+    }
+
+    .btn-theme-toggle {
+      width: 2em;
+      height: 2em;
+    }
   </style>
 </head>
 
 <body>
-  <div id="wrapper" class="container pt-5">
+  <div id="wrapper" class="container pt-5 position-relative">
     <h1>Search for Public APIs</h1>
     <p>All data on public APIs is sourced from <a href="https://github.com/public-apis/public-apis">Public APIs</a>. I
       made this page to make searching and filtering for browser friendly APIs easier.</p>
