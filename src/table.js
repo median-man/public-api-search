@@ -1,5 +1,5 @@
-import { biStar, biStarFill } from "./icons.js";
-import ThemeToggle from "./theme_toggle.js";
+import { biStar, biStarFill } from "./icons";
+import ThemeToggle from "./theme_toggle";
 
 let corsToggle;
 let favoritesToggle;

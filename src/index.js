@@ -1,13 +1,13 @@
-import { fetchApiCollection } from "./api_collection.js";
-import { debounce } from "./util.js";
+import { fetchApiCollection } from "./api_collection";
+import { debounce } from "./util";
 import {
   enableTableControls,
   getTableState,
   initTable,
   setTableEntries,
   showTable,
-} from "./table.js";
-import ThemeToggle from "./theme_toggle.js";
+} from "./table";
+import ThemeToggle from "./theme_toggle";
 
 async function main() {
   const errorView = document.querySelector("#error-view");

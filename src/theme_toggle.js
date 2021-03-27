@@ -1,4 +1,4 @@
-import { biMoonStarsFillIcon, biSunIcon } from "./icons.js";
+import { biMoonStarsFillIcon, biSunIcon } from "./icons";
 
 const prefersDarkTheme = window.matchMedia("(prefers-color-scheme: dark)")
   .matches;
