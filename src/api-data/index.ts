@@ -14,9 +14,9 @@ export enum CorsSupport {
 
 export interface API {
   API: string;
-  Auth: string;
+  Auth: AuthType;
   Category: string;
-  Cors: string;
+  Cors: CorsSupport;
   Description: string;
   HTTPS: boolean;
   Link: string;
@@ -27,4 +27,4 @@ export interface APICollection {
   entries: API[];
 }
 
-export { default as apiData } from "./apis.json";
+export const apiData: APICollection = require("./apis.json");
