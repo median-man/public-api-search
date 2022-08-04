@@ -13,6 +13,7 @@ export enum CorsSupport {
 }
 
 export interface API {
+  /** name of the api */
   API: string;
   Auth: AuthType;
   Category: string;

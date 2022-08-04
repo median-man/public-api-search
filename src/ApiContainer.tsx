@@ -1,7 +1,155 @@
-import { ReactElement, useId } from "react";
+import {
+  useState,
+  useId,
+  createContext,
+  ReactNode,
+  useContext,
+  useReducer,
+} from "react";
+
 import { API, apiData, CorsSupport } from "./api-data";
 
-export default function APITable() {
+interface FavoritableApi extends API {
+  isFavorite?: boolean;
+}
+
+enum Filter {
+  cors = "corsFilter",
+  https = "httpsFilter",
+  favorites = "favoritesFilter",
+}
+
+interface ApiState {
+  apis: FavoritableApi[];
+  query: string;
+  [Filter.cors]: boolean;
+  [Filter.https]: boolean;
+  [Filter.favorites]: boolean;
+}
+
+type ActionType =
+  | { type: "toggle filter"; payload: Filter }
+  | { type: "set query"; payload: string }
+  | { type: "toggle favorite"; payload: API };
+
+const initialState: ApiState = {
+  apis: apiData.entries,
+  query: "",
+  [Filter.cors]: false,
+  [Filter.https]: false,
+  [Filter.favorites]: false,
+};
+
+function apiReducer(state: ApiState, action: ActionType): ApiState {
+  switch (action.type) {
+    case "toggle filter":
+      return {
+        ...state,
+        [action.payload]: !state[action.payload],
+      };
+
+    case "set query":
+      return state;
+    case "toggle favorite":
+      return state;
+  }
+}
+
+const ApiStateContext = createContext({} as ApiState);
+const ApiDispatchContext = createContext((action: ActionType) => {});
+const useApiState = () => useContext(ApiStateContext);
+const useApiDispatch = () => useContext(ApiDispatchContext);
+
+function ApiContainer() {
+  const [state, dispatch] = useReducer(apiReducer, initialState);
+  return (
+    <ApiDispatchContext.Provider value={dispatch}>
+      <ApiStateContext.Provider value={state}>
+        <ApiTableControls />
+        <ApiTable />
+      </ApiStateContext.Provider>
+    </ApiDispatchContext.Provider>
+  );
+}
+
+function ApiTableControls() {
+  const dispatch = useApiDispatch();
+  const { httpsFilter, corsFilter, favoritesFilter } = useApiState();
+  return (
+    <>
+      <hr />
+      <p>Use toggle buttons and search box to filter the table.</p>
+      <div className="mb-3 row">
+        <div className="col-md-4">
+          <div
+            id="table-buttons"
+            className="btn-group"
+            role="group"
+            aria-label="Choose filters to apply to the table."
+          >
+            <input
+              type="checkbox"
+              className="btn-check"
+              id="cors-toggle"
+              checked={corsFilter}
+              onChange={() =>
+                dispatch({ type: "toggle filter", payload: Filter.cors })
+              }
+            />
+            <label className="btn btn-outline-primary" htmlFor="cors-toggle">
+              CORS
+            </label>
+            <input
+              type="checkbox"
+              className="btn-check"
+              id="https-toggle"
+              checked={httpsFilter}
+              onChange={() =>
+                dispatch({ type: "toggle filter", payload: Filter.https })
+              }
+            />
+            <label className="btn btn-outline-primary" htmlFor="https-toggle">
+              HTTPS
+            </label>
+            <input
+              type="checkbox"
+              className="btn-check"
+              id="favorites-toggle"
+              checked={favoritesFilter}
+              onChange={() =>
+                dispatch({ type: "toggle filter", payload: Filter.favorites })
+              }
+            />
+            <label
+              className="btn btn-outline-primary"
+              htmlFor="favorites-toggle"
+            >
+              Favorites
+            </label>
+          </div>
+        </div>
+        <div className="col-md pt-3 pt-md-0">
+          <input
+            id="search-input"
+            className="form-control d-inline-block"
+            placeholder="search"
+            aria-label="Search table"
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+function ApiTable() {
+  const { apis, httpsFilter, corsFilter, favoritesFilter } = useApiState();
+  const filteredApis = apis.filter(
+    (api: FavoritableApi): boolean =>
+      !(
+        (corsFilter && api.Cors !== CorsSupport.yes) ||
+        (favoritesFilter && !api.isFavorite) ||
+        (httpsFilter && !api.HTTPS)
+      )
+  );
   return (
     <div className="table-responsive">
       <table className="table">
@@ -17,7 +165,7 @@ export default function APITable() {
           </tr>
         </thead>
         <tbody>
-          {apiData.entries.map((api) => (
+          {filteredApis.map((api) => (
             <TableRow key={api.Link} api={api} />
           ))}
         </tbody>
@@ -150,3 +298,5 @@ function LargeQuestion({ label }: SvgIconProps) {
     </svg>
   );
 }
+
+export default ApiContainer;
