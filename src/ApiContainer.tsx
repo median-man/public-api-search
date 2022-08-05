@@ -1,3 +1,12 @@
+/* 
+TODO: finish implementing existing features
+  - Implement query
+  - Implement favorites
+  - Persist state client side
+  - Implement scroll to top feature
+  - Implement light/dark theme toggle
+*/
+
 import {
   useState,
   useId,
@@ -13,6 +22,7 @@ interface FavoritableApi extends API {
   isFavorite?: boolean;
 }
 
+/** Enum of filter toggle states */
 enum Filter {
   cors = "corsFilter",
   https = "httpsFilter",
@@ -60,6 +70,7 @@ const ApiDispatchContext = createContext((action: ActionType) => {});
 const useApiState = () => useContext(ApiStateContext);
 const useApiDispatch = () => useContext(ApiDispatchContext);
 
+/** State container for the table of apis and the controls */
 function ApiContainer() {
   const [state, dispatch] = useReducer(apiReducer, initialState);
   return (
@@ -140,6 +151,7 @@ function ApiTableControls() {
     </>
   );
 }
+
 function ApiTable() {
   const { apis, httpsFilter, corsFilter, favoritesFilter } = useApiState();
   const filteredApis = apis.filter(
@@ -218,7 +230,9 @@ function CorsNode({ cors }: CorsNodeProps) {
   }
 }
 
+/** Common props for all Svg Icons. */
 interface SvgIconProps {
+  /** sets aria label */
   label: string;
 }
 
