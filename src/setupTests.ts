@@ -3,3 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
+
+import mockApiData from "./api-data/apis.mock.json";
+
+jest.mock("./api-data/apis.json", () => mockApiData);
