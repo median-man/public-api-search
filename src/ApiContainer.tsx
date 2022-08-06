@@ -162,7 +162,7 @@ function ApiTableControls() {
 
 function ApiTable() {
   const { apis, httpsFilter, corsFilter, favoritesFilter } = useApiState();
-  const filteredApis = apis.filter(
+  const filteredApis = apis.slice(0, 10).filter(
     (api: FavoritableApi): boolean =>
       !(
         (corsFilter && api.Cors !== CorsSupport.yes) ||

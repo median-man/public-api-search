@@ -1,4 +1,10 @@
-import { ActionType, apiReducer, ApiState, Filter } from "./ApiContainer";
+import { render, screen, within } from "@testing-library/react";
+import ApiContainer, {
+  ActionType,
+  apiReducer,
+  ApiState,
+  Filter,
+} from "./ApiContainer";
 import { apiData } from "./api-data";
 
 describe("apiReducer", () => {
@@ -62,5 +68,18 @@ describe("apiReducer", () => {
         apis: [{ ...api, isFavorite: true }, ...state.apis.slice(1)],
       });
     });
+  });
+});
+
+describe("ApiContainer", () => {
+  test("should render", () => {
+    render(<ApiContainer />);
+  });
+
+  test("should show a row for each api", () => {
+    render(<ApiContainer />);
+
+    // +1 to account for header row
+    expect(screen.getAllByRole("row")).toHaveLength(apiData.entries.length + 1);
   });
 });
