@@ -23,13 +23,13 @@ interface FavoritableApi extends API {
 }
 
 /** Enum of filter toggle states */
-enum Filter {
+export enum Filter {
   cors = "corsFilter",
   https = "httpsFilter",
   favorites = "favoritesFilter",
 }
 
-interface ApiState {
+export interface ApiState {
   apis: FavoritableApi[];
   query: string;
   [Filter.cors]: boolean;
