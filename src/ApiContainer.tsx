@@ -59,7 +59,7 @@ export function apiReducer(state: ApiState, action: ActionType): ApiState {
       };
 
     case "set query":
-      return state;
+      return { ...state, query: action.payload };
     case "toggle favorite":
       return state;
   }

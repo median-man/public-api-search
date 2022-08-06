@@ -1,18 +1,19 @@
 import { ActionType, apiReducer, ApiState, Filter } from "./ApiContainer";
 import { apiData } from "./api-data";
-describe("apiReducer", () => {
-  describe("'toggle filter action", () => {
-    let state: ApiState;
-    beforeEach(() => {
-      state = {
-        apis: apiData.entries,
-        query: "",
-        [Filter.cors]: false,
-        [Filter.https]: false,
-        [Filter.favorites]: false,
-      };
-    });
 
+describe("apiReducer", () => {
+  let state: ApiState;
+  beforeEach(() => {
+    state = {
+      apis: apiData.entries,
+      query: "",
+      [Filter.cors]: false,
+      [Filter.https]: false,
+      [Filter.favorites]: false,
+    };
+  });
+
+  describe("'toggle filter' action", () => {
     const toggleFilterActionTest = (filter: Filter) => {
       const action: ActionType = {
         type: "toggle filter",
@@ -31,8 +32,20 @@ describe("apiReducer", () => {
       toggleFilterActionTest(Filter.https);
     });
 
-    test("should toggle  filter", () => {
+    test("should toggle favorites filter", () => {
       toggleFilterActionTest(Filter.favorites);
+    });
+  });
+
+  describe("'set query' action", () => {
+    test("should set the query", () => {
+      const query = "hello";
+      const action: ActionType = {
+        type: "set query",
+        payload: query,
+      };
+      const nextState = apiReducer(state, action);
+      expect(nextState).toEqual({ ...state, query });
     });
   });
 });
