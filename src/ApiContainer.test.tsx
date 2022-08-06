@@ -48,4 +48,19 @@ describe("apiReducer", () => {
       expect(nextState).toEqual({ ...state, query });
     });
   });
+
+  describe("'toggle favorite' action", () => {
+    test("should toggle the favorite property for a given api entry", () => {
+      const api = { ...apiData.entries[0] };
+      const action: ActionType = {
+        type: "toggle favorite",
+        payload: api,
+      };
+      const nextState = apiReducer(state, action);
+      expect(nextState).toEqual({
+        ...state,
+        apis: [{ ...api, isFavorite: true }, ...state.apis.slice(1)],
+      });
+    });
+  });
 });

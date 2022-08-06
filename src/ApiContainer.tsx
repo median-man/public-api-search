@@ -60,8 +60,17 @@ export function apiReducer(state: ApiState, action: ActionType): ApiState {
 
     case "set query":
       return { ...state, query: action.payload };
+
     case "toggle favorite":
-      return state;
+      return {
+        ...state,
+        apis: state.apis.map((api) => {
+          if (api.Link === action.payload.Link) {
+            return { ...api, isFavorite: !api.isFavorite };
+          }
+          return api;
+        }),
+      };
   }
 }
 
