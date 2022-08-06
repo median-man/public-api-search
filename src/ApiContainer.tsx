@@ -37,7 +37,7 @@ interface ApiState {
   [Filter.favorites]: boolean;
 }
 
-type ActionType =
+export type ActionType =
   | { type: "toggle filter"; payload: Filter }
   | { type: "set query"; payload: string }
   | { type: "toggle favorite"; payload: API };
@@ -50,7 +50,7 @@ const initialState: ApiState = {
   [Filter.favorites]: false,
 };
 
-function apiReducer(state: ApiState, action: ActionType): ApiState {
+export function apiReducer(state: ApiState, action: ActionType): ApiState {
   switch (action.type) {
     case "toggle filter":
       return {
@@ -88,7 +88,6 @@ function ApiTableControls() {
   const { httpsFilter, corsFilter, favoritesFilter } = useApiState();
   return (
     <>
-      <hr />
       <p>Use toggle buttons and search box to filter the table.</p>
       <div className="mb-3 row">
         <div className="col-md-4">
