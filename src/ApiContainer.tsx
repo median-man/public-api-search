@@ -1,6 +1,5 @@
 /* 
 TODO: finish implementing existing features
-  - Implement query
   - Implement favorites
   - Persist state client side
   - Implement scroll to top feature
@@ -8,10 +7,8 @@ TODO: finish implementing existing features
 */
 
 import {
-  useState,
   useId,
   createContext,
-  ReactNode,
   useContext,
   useReducer,
 } from "react";
@@ -94,7 +91,7 @@ function ApiContainer() {
 
 function ApiTableControls() {
   const dispatch = useApiDispatch();
-  const { httpsFilter, corsFilter, favoritesFilter } = useApiState();
+  const { httpsFilter, corsFilter, favoritesFilter, query } = useApiState();
   return (
     <>
       <p>Use toggle buttons and search box to filter the table.</p>
@@ -153,6 +150,10 @@ function ApiTableControls() {
             className="form-control d-inline-block"
             placeholder="search"
             aria-label="Search table"
+            value={query}
+            onChange={(evt) =>
+              dispatch({ type: "set query", payload: evt.target.value })
+            }
           />
         </div>
       </div>
@@ -161,15 +162,23 @@ function ApiTableControls() {
 }
 
 function ApiTable() {
-  const { apis, httpsFilter, corsFilter, favoritesFilter } = useApiState();
-  const filteredApis = apis.slice(0, 10).filter(
-    (api: FavoritableApi): boolean =>
-      !(
-        (corsFilter && api.Cors !== CorsSupport.yes) ||
-        (favoritesFilter && !api.isFavorite) ||
-        (httpsFilter && !api.HTTPS)
-      )
-  );
+  const { apis, httpsFilter, corsFilter, favoritesFilter, query } =
+    useApiState();
+  const filteredApis = apis
+    .filter(
+      (api: FavoritableApi): boolean =>
+        !(
+          (corsFilter && api.Cors !== CorsSupport.yes) ||
+          (favoritesFilter && !api.isFavorite) ||
+          (httpsFilter && !api.HTTPS)
+        )
+    )
+    .filter((api: FavoritableApi) => {
+      const lCaseQuery = query.toLowerCase();
+      return Object.values(api)
+        .filter((v) => typeof v === "string")
+        .some((v) => v.toLowerCase().includes(lCaseQuery));
+    });
   return (
     <div className="table-responsive">
       <table className="table">
@@ -185,7 +194,8 @@ function ApiTable() {
           </tr>
         </thead>
         <tbody>
-          {filteredApis.map((api) => (
+          {/* TODO: Remove slice */}
+          {filteredApis.slice(0, 50).map((api) => (
             <TableRow key={api.Link} api={api} />
           ))}
         </tbody>
