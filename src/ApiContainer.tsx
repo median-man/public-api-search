@@ -6,12 +6,7 @@ TODO: finish implementing existing features
   - Implement light/dark theme toggle
 */
 
-import {
-  useId,
-  createContext,
-  useContext,
-  useReducer,
-} from "react";
+import { useId, createContext, useContext, useReducer } from "react";
 
 import { API, apiData, CorsSupport } from "./api-data";
 
@@ -112,7 +107,10 @@ function ApiTableControls() {
                 dispatch({ type: "toggle filter", payload: Filter.cors })
               }
             />
-            <label className="btn btn-outline-primary" htmlFor="cors-toggle">
+            <label
+              className="btn btn-outline-primary btn-check-label"
+              htmlFor="cors-toggle"
+            >
               CORS
             </label>
             <input
@@ -124,7 +122,10 @@ function ApiTableControls() {
                 dispatch({ type: "toggle filter", payload: Filter.https })
               }
             />
-            <label className="btn btn-outline-primary" htmlFor="https-toggle">
+            <label
+              className="btn btn-outline-primary btn-check-label"
+              htmlFor="https-toggle"
+            >
               HTTPS
             </label>
             <input
@@ -137,7 +138,7 @@ function ApiTableControls() {
               }
             />
             <label
-              className="btn btn-outline-primary"
+              className="btn btn-outline-primary btn-check-label"
               htmlFor="favorites-toggle"
             >
               Favorites
@@ -184,13 +185,13 @@ function ApiTable() {
       <table className="table">
         <thead>
           <tr>
-            <th />
-            <th>API</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Auth</th>
-            <th>HTTPS</th>
-            <th>CORS</th>
+            <td />
+            <th scope="col">API</th>
+            <th scope="col">Category</th>
+            <th scope="col">Description</th>
+            <th scope="col">Auth</th>
+            <th scope="col">HTTPS</th>
+            <th scope="col">CORS</th>
           </tr>
         </thead>
         <tbody>
@@ -223,11 +224,25 @@ function TableRow({ api }: TableRowProps) {
       <td>{Category}</td>
       <td>{Description}</td>
       <td>{Auth}</td>
-      <td>{HTTPS && <LargeCheck label="available" />}</td>
+      <td>
+        <HttpsNode https={HTTPS} />
+      </td>
       <td>
         <CorsNode cors={Cors} />
       </td>
     </tr>
+  );
+}
+
+type HttpsNodeProps = {
+  https: boolean;
+};
+
+function HttpsNode({ https }: HttpsNodeProps) {
+  return https ? (
+    <LargeCheck label="https available" />
+  ) : (
+    <LargeX label="https unavailable" />
   );
 }
 
@@ -238,13 +253,13 @@ interface CorsNodeProps {
 function CorsNode({ cors }: CorsNodeProps) {
   switch (cors) {
     case CorsSupport.yes:
-      return <LargeCheck label="supported" />;
+      return <LargeCheck label="supports cors" />;
 
     case CorsSupport.no:
-      return <LargeX label="not supported" />;
+      return <LargeX label="no cors" />;
 
     default:
-      return <LargeQuestion label="unknown" />;
+      return <LargeQuestion label="cors support unknown" />;
   }
 }
 
