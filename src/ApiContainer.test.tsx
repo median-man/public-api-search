@@ -81,8 +81,7 @@ describe("ApiContainer", () => {
   test("should show a row for each api", () => {
     render(<ApiContainer />);
 
-    // +1 to account for header row
-    expect(screen.getAllByRole("row")).toHaveLength(apiData.entries.length + 1);
+    expect(getAllApiRows()).toHaveLength(apiData.entries.length);
   });
 
   test("should filter by cors", () => {
@@ -93,7 +92,7 @@ describe("ApiContainer", () => {
     userEvent.click(corsToggle);
 
     // Remove header row
-    const rows = screen.getAllByRole("row").slice(1);
+    const rows = getAllApiRows();
 
     expect(rows).toHaveLength(
       apiData.entries.filter((e) => e.Cors === "yes").length
@@ -112,7 +111,7 @@ describe("ApiContainer", () => {
     userEvent.click(httpsToggle);
 
     // Remove header row
-    const rows = screen.getAllByRole("row").slice(1);
+    const rows = getAllApiRows();
 
     expect(rows).toHaveLength(apiData.entries.filter((e) => e.HTTPS).length);
 
@@ -120,4 +119,26 @@ describe("ApiContainer", () => {
       within(row).getByRole("cell", { name: /https available/i });
     });
   });
+
+  test("should be able to toggle a favorite api", () => {
+    render(<ApiContainer />);
+
+    const rows = getAllApiRows();
+    const firstApi = rows[0];
+    let favoriteToggle = within(firstApi).getByRole("button", {
+      name: /add to favorites/i,
+    });
+    userEvent.click(favoriteToggle);
+
+    // button text should have changed
+    favoriteToggle = within(firstApi).getByRole("button", {
+      name: /remove from favorites/i,
+    });
+  });
+
+  /** Returns all rows with api data synchronously */
+  function getAllApiRows() {
+    // remove header row with slice(1)
+    return screen.getAllByRole("row").slice(1);
+  }
 });
