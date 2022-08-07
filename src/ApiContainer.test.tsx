@@ -123,16 +123,23 @@ describe("ApiContainer", () => {
   test("should be able to toggle a favorite api", () => {
     render(<ApiContainer />);
 
-    const rows = getAllApiRows();
-    const firstApi = rows[0];
-    let favoriteToggle = within(firstApi).getByRole("button", {
+    // initial favorite button text
+    within(getAllApiRows()[0]).getByRole("button", {
       name: /add to favorites/i,
     });
-    userEvent.click(favoriteToggle);
+
+    toggleFavoriteApi(getAllApiRows()[0]);
 
     // button text should have changed
-    favoriteToggle = within(firstApi).getByRole("button", {
+    within(getAllApiRows()[0]).getByRole("button", {
       name: /remove from favorites/i,
+    });
+
+    toggleFavoriteApi(getAllApiRows()[0]);
+
+    // button text should have reverted
+    within(getAllApiRows()[0]).getByRole("button", {
+      name: /add to favorites/i,
     });
   });
 
@@ -140,5 +147,13 @@ describe("ApiContainer", () => {
   function getAllApiRows() {
     // remove header row with slice(1)
     return screen.getAllByRole("row").slice(1);
+  }
+
+  /** Fires click event on first api to set isFavorite field to true. */
+  function toggleFavoriteApi(apiEl: HTMLElement) {
+    const favoriteToggle = within(apiEl).getByRole("button", {
+      name: /favorites/i,
+    });
+    userEvent.click(favoriteToggle);
   }
 });
