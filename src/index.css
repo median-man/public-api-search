@@ -1,0 +1,5 @@
+/* Help user distinguish between checked/unchecked toggle button when it has
+focus */
+.btn-group > .btn-check:focus:not(:checked) + .btn-check-label {
+  opacity: 0.8;
+}
