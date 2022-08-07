@@ -1,14 +1,50 @@
 {
-  "count": 1,
+  "count": 5,
   "entries": [
     {
-      "API": "AdoptAPet",
-      "Description": "Resource to help get pets adopted",
+      "API": "First Mock",
+      "Description": "First mock api",
       "Auth": "apiKey",
       "HTTPS": true,
       "Cors": "yes",
-      "Link": "https://www.adoptapet.com/public/apis/pet_list.html",
+      "Link": "https://firstmock.com",
       "Category": "Animals"
+    },
+    {
+      "API": "No Auth",
+      "Description": "Mock has blank Auth field and does not support HTTPS.",
+      "Auth": "",
+      "HTTPS": false,
+      "Cors": "yes",
+      "Link": "https://noauth.com",
+      "Category": "Anime"
+    },
+    {
+      "API": "OAuth Mock",
+      "Description": "This mock uses OAuth",
+      "Auth": "OAuth",
+      "HTTPS": true,
+      "Cors": "unknown",
+      "Link": "https://oauth.com",
+      "Category": "Security"
+    },
+    {
+      "API": "Mashape Auth",
+      "Description": "This mock uses a Mashape key",
+      "Auth": "X-Mashape-Key",
+      "HTTPS": true,
+      "Cors": "unknown",
+      "Link": "https://mashapekey.com",
+      "Category": "Security"
+    },
+    {
+      "API": "User-Agent Auth",
+      "Description": "This mock contains User-Agent in the Auth field",
+      "Auth": "User-Agent",
+      "HTTPS": true,
+      "Cors": "unknown",
+      "Link": "https://useragent.com",
+      "Category": "Security"
     }
   ]
 }
