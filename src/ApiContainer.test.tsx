@@ -91,7 +91,6 @@ describe("ApiContainer", () => {
 
     userEvent.click(corsToggle);
 
-    // Remove header row
     const rows = getAllApiRows();
 
     expect(rows).toHaveLength(
@@ -110,7 +109,6 @@ describe("ApiContainer", () => {
 
     userEvent.click(httpsToggle);
 
-    // Remove header row
     const rows = getAllApiRows();
 
     expect(rows).toHaveLength(apiData.entries.filter((e) => e.HTTPS).length);
@@ -118,6 +116,23 @@ describe("ApiContainer", () => {
     rows.forEach((row) => {
       within(row).getByRole("cell", { name: /https available/i });
     });
+  });
+
+  test("should filter favorites", () => {
+    render(<ApiContainer />);
+
+    // make the first and third rows favorites
+    let rows = getAllApiRows();
+    toggleFavoriteApi(rows[0]);
+    toggleFavoriteApi(rows[2]);
+
+    // toggle favorites filter
+    const favoritesToggle = screen.getByRole("checkbox", { name: /favorites/i });
+    userEvent.click(favoritesToggle);
+
+    // there should only be 2 rows now
+    rows = getAllApiRows();
+    expect(rows).toHaveLength(2);
   });
 
   test("should be able to toggle a favorite api", () => {
