@@ -1,6 +1,5 @@
 /* 
 TODO: finish implementing existing features
-  - Persist state client side
   - Implement scroll to top feature
   - Implement light/dark theme toggle
 */
@@ -8,6 +7,7 @@ TODO: finish implementing existing features
 import { useId, createContext, useContext, useReducer } from "react";
 
 import { API, apiData, CorsSupport } from "./api-data";
+import * as favorites from "./favorites";
 
 interface FavoritableApi extends API {
   isFavorite?: boolean;
@@ -33,13 +33,26 @@ export type ActionType =
   | { type: "set query"; payload: string }
   | { type: "toggle favorite"; payload: API };
 
-const initialState: ApiState = {
+const initialState: ApiState = initializeFavorites({
   apis: apiData.entries,
   query: "",
   [Filter.cors]: false,
   [Filter.https]: false,
   [Filter.favorites]: false,
-};
+});
+
+/** Initializes user's favorites from localStorage and returns updated state. */
+function initializeFavorites(state: ApiState): ApiState {
+  return {
+    ...state,
+    apis: state.apis.map((api) => {
+      if (favorites.has(api.Link)) {
+        return { ...api, isFavorite: true };
+      }
+      return api;
+    }),
+  };
+}
 
 export function apiReducer(state: ApiState, action: ActionType): ApiState {
   switch (action.type) {
@@ -73,6 +86,7 @@ const useApiDispatch = () => useContext(ApiDispatchContext);
 /** State container for the table of apis and the controls */
 function ApiContainer() {
   const [state, dispatch] = useReducer(apiReducer, initialState);
+
   return (
     <ApiDispatchContext.Provider value={dispatch}>
       <ApiStateContext.Provider value={state}>
@@ -181,9 +195,14 @@ function ApiTable() {
         .some((v) => v.toLowerCase().includes(lCaseQuery));
     });
 
-  const handleToggleFavorite = (api: FavoritableApi) =>
+  const handleToggleFavorite = (api: FavoritableApi) => {
+    if (favorites.has(api.Link)) {
+      favorites.remove(api.Link);
+    } else {
+      favorites.add(api.Link);
+    }
     dispatch({ type: "toggle favorite", payload: api });
-
+  };
   return (
     <div className="table-responsive">
       <table className="table">
