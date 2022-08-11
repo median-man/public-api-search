@@ -1,6 +1,5 @@
 /* 
 TODO: finish implementing existing features
-  - Implement scroll to top feature
   - Implement light/dark theme toggle
 */
 
