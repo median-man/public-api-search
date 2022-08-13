@@ -2,7 +2,8 @@ import React, { Suspense, useState, useEffect } from "react";
 import "./App.css";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeProvider, useTheme } from "./ThemeContext";
-const ApiContainer = React.lazy(() => import("./ApiContainer"));
+const apiContainerPromise = import("./ApiContainer");
+const ApiContainer = React.lazy(() => apiContainerPromise);
 
 function App() {
   return (
