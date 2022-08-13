@@ -3,3 +3,20 @@ focus */
 .btn-group > .btn-check:focus:not(:checked) + .btn-check-label {
   opacity: 0.8;
 }
+
+/* Custom dark theme styles */
+.bg-dark h1,
+.bg-dark a {
+  color: var(--bs-info);
+}
+
+.bg-dark .form-control {
+  border-color: var(--bs-info);
+  background-color: var(--bs-dark);
+  color: var(--light);
+}
+
+.bg-dark .form-control::placeholder {
+  color: var(--bs-info);
+  opacity: 0.7;
+}

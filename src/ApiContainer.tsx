@@ -7,6 +7,7 @@ import { useId, createContext, useContext, useReducer } from "react";
 
 import { API, apiData, CorsSupport } from "./api-data";
 import * as favorites from "./favorites";
+import { useTheme } from "./ThemeContext";
 
 interface FavoritableApi extends API {
   isFavorite?: boolean;
@@ -98,6 +99,7 @@ function ApiContainer() {
 
 function ApiTableControls() {
   const dispatch = useApiDispatch();
+  const { theme } = useTheme();
   const { httpsFilter, corsFilter, favoritesFilter, query } = useApiState();
   return (
     <>
@@ -120,7 +122,9 @@ function ApiTableControls() {
               }
             />
             <label
-              className="btn btn-outline-primary btn-check-label"
+              className={`btn btn-outline-${
+                theme === "light" ? "primary" : "info"
+              } btn-check-label`}
               htmlFor="cors-toggle"
             >
               CORS
@@ -135,7 +139,9 @@ function ApiTableControls() {
               }
             />
             <label
-              className="btn btn-outline-primary btn-check-label"
+              className={`btn btn-outline-${
+                theme === "light" ? "primary" : "info"
+              } btn-check-label`}
               htmlFor="https-toggle"
             >
               HTTPS
@@ -150,7 +156,9 @@ function ApiTableControls() {
               }
             />
             <label
-              className="btn btn-outline-primary btn-check-label"
+              className={`btn btn-outline-${
+                theme === "light" ? "primary" : "info"
+              } btn-check-label`}
               htmlFor="favorites-toggle"
             >
               Favorites
@@ -176,6 +184,7 @@ function ApiTableControls() {
 
 function ApiTable() {
   const dispatch = useApiDispatch();
+  const { theme } = useTheme();
   const { apis, httpsFilter, corsFilter, favoritesFilter, query } =
     useApiState();
   const filteredApis = apis
@@ -204,7 +213,7 @@ function ApiTable() {
   };
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${theme === "dark" ? "table-dark" : ""}`}>
         <thead>
           <tr>
             <td />
@@ -217,8 +226,7 @@ function ApiTable() {
           </tr>
         </thead>
         <tbody>
-          {/* TODO: Remove slice */}
-          {filteredApis.slice(0, 50).map((api) => (
+          {filteredApis.map((api) => (
             <TableRow
               key={api.Link}
               api={api}
