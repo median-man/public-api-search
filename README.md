@@ -26,6 +26,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+#### `npm run deploy`
+
+THis script uses the `fetch-data` script described below before creating a build using the `build` script described below before using the `gh-pages` package to deploy the static build to GitHub Pages.
+
 #### `npm run fetch-data`
 
 This script uses curl to download api data from <https://api.publicapis.org/> and writes the data to `src/data/apis.json`.
