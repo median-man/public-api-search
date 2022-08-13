@@ -1,9 +1,4 @@
-/* 
-TODO: finish implementing existing features
-  - Implement light/dark theme toggle
-*/
-
-import { useId, createContext, useContext, useReducer } from "react";
+import React, { useId, createContext, useContext, useReducer } from "react";
 
 import { API, apiData, CorsSupport } from "./api-data";
 import * as favorites from "./favorites";
