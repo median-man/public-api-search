@@ -4,6 +4,9 @@ import { API, apiData, CorsSupport } from "./api-data";
 import * as favorites from "./favorites";
 import { useTheme } from "./ThemeContext";
 
+/** Maximum number of apis displayed in the table */
+export const MAX_APIS = 50;
+
 interface FavoritableApi extends API {
   isFavorite?: boolean;
 }
@@ -209,6 +212,11 @@ function ApiTable() {
   return (
     <div className="table-responsive">
       <table className={`table ${theme === "dark" ? "table-dark" : ""}`}>
+        <caption className={theme === "dark" ? "text-white" : ""}>
+          API Search results. Displaying{" "}
+          {Math.min(filteredApis.length, MAX_APIS)} of {filteredApis.length}{" "}
+          APIs.
+        </caption>
         <thead>
           <tr>
             <td />
@@ -221,7 +229,7 @@ function ApiTable() {
           </tr>
         </thead>
         <tbody>
-          {filteredApis.map((api) => (
+          {filteredApis.slice(0, MAX_APIS).map((api) => (
             <TableRow
               key={api.Link}
               api={api}

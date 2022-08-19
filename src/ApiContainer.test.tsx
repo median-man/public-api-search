@@ -6,6 +6,7 @@ import ApiContainer, {
   apiReducer,
   ApiState,
   Filter,
+  MAX_APIS,
 } from "./ApiContainer";
 import { apiData } from "./api-data";
 
@@ -78,10 +79,12 @@ describe("ApiContainer", () => {
     render(<ApiContainer />);
   });
 
-  test("should show a row for each api", () => {
+  test(`should show up to ${MAX_APIS} apis`, () => {
     render(<ApiContainer />);
 
-    expect(getAllApiRows()).toHaveLength(apiData.entries.length);
+    expect(getAllApiRows()).toHaveLength(
+      Math.min(apiData.entries.length, MAX_APIS)
+    );
   });
 
   test("should filter by cors", () => {
@@ -93,9 +96,11 @@ describe("ApiContainer", () => {
 
     const rows = getAllApiRows();
 
-    expect(rows).toHaveLength(
-      apiData.entries.filter((e) => e.Cors === "yes").length
+    const expectedLength = Math.min(
+      apiData.entries.filter((e) => e.Cors === "yes").length,
+      MAX_APIS
     );
+    expect(rows).toHaveLength(expectedLength);
 
     rows.forEach((row) =>
       within(row).getByRole("cell", { name: /supports cors/i })
@@ -111,7 +116,11 @@ describe("ApiContainer", () => {
 
     const rows = getAllApiRows();
 
-    expect(rows).toHaveLength(apiData.entries.filter((e) => e.HTTPS).length);
+    const expectedLength = Math.min(
+      apiData.entries.filter((e) => e.HTTPS).length,
+      MAX_APIS
+    );
+    expect(rows).toHaveLength(expectedLength);
 
     rows.forEach((row) => {
       within(row).getByRole("cell", { name: /https available/i });
@@ -127,7 +136,9 @@ describe("ApiContainer", () => {
     toggleFavoriteApi(rows[2]);
 
     // toggle favorites filter
-    const favoritesToggle = screen.getByRole("checkbox", { name: /favorites/i });
+    const favoritesToggle = screen.getByRole("checkbox", {
+      name: /favorites/i,
+    });
     userEvent.click(favoritesToggle);
 
     // there should only be 2 rows now
