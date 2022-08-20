@@ -6,6 +6,7 @@ import ApiContainer, {
   apiReducer,
   ApiState,
   Filter,
+  initialState,
   MAX_APIS,
 } from "./ApiContainer";
 import { apiData } from "./api-data";
@@ -14,11 +15,8 @@ describe("apiReducer", () => {
   let state: ApiState;
   beforeEach(() => {
     state = {
+      ...initialState,
       apis: apiData.entries,
-      query: "",
-      [Filter.cors]: false,
-      [Filter.https]: false,
-      [Filter.favorites]: false,
     };
   });
 
@@ -70,6 +68,19 @@ describe("apiReducer", () => {
         ...state,
         apis: [{ ...api, isFavorite: true }, ...state.apis.slice(1)],
       });
+    });
+  });
+
+  describe("'set category' action", () => {
+    test("should set the category", () => {
+      const category = "hello";
+      const action: ActionType = {
+        type: "set category",
+        payload: category,
+      };
+      const nextState = apiReducer(state, action);
+      expect(nextState).not.toBe(state);
+      expect(nextState).toEqual({ ...state, category });
     });
   });
 });

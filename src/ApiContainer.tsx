@@ -21,6 +21,7 @@ export enum Filter {
 export interface ApiState {
   apis: FavoritableApi[];
   query: string;
+  category: string;
   [Filter.cors]: boolean;
   [Filter.https]: boolean;
   [Filter.favorites]: boolean;
@@ -29,11 +30,13 @@ export interface ApiState {
 export type ActionType =
   | { type: "toggle filter"; payload: Filter }
   | { type: "set query"; payload: string }
-  | { type: "toggle favorite"; payload: API };
+  | { type: "toggle favorite"; payload: API }
+  | { type: "set category"; payload: string };
 
-const initialState: ApiState = initializeFavorites({
+export const initialState: ApiState = initializeFavorites({
   apis: apiData.entries,
   query: "",
+  category: "",
   [Filter.cors]: false,
   [Filter.https]: false,
   [Filter.favorites]: false,
@@ -73,6 +76,8 @@ export function apiReducer(state: ApiState, action: ActionType): ApiState {
           return api;
         }),
       };
+    case "set category":
+      return { ...state, category: action.payload };
   }
 }
 
