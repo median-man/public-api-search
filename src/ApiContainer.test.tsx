@@ -157,6 +157,24 @@ describe("ApiContainer", () => {
     expect(rows).toHaveLength(2);
   });
 
+  test("should filter by category", async () => {
+    render(<ApiContainer />);
+
+    const categorySelect = await screen.findByRole("combobox", {
+      name: /category/i,
+    });
+
+    const category = apiData.entries[0].Category;
+
+    userEvent.selectOptions(categorySelect, category);
+    const apiRows = getAllApiRows();
+    apiRows.forEach((row) =>
+      expect(within(row).getByTestId("category-cell")).toHaveTextContent(
+        category
+      )
+    );
+  });
+
   test("should be able to toggle a favorite api", () => {
     render(<ApiContainer />);
 

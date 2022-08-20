@@ -29,3 +29,7 @@ export interface APICollection {
 }
 
 export const apiData: APICollection = require("./apis.json");
+
+export const categories = Array.from(
+  new Set(apiData.entries.map((api) => api.Category))
+);

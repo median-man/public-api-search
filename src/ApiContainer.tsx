@@ -1,6 +1,6 @@
 import React, { useId, createContext, useContext, useReducer } from "react";
 
-import { API, apiData, CorsSupport } from "./api-data";
+import { API, apiData, CorsSupport, categories } from "./api-data";
 import * as favorites from "./favorites";
 import { useTheme } from "./ThemeContext";
 
@@ -103,15 +103,16 @@ function ApiContainer() {
 function ApiTableControls() {
   const dispatch = useApiDispatch();
   const { theme } = useTheme();
-  const { httpsFilter, corsFilter, favoritesFilter, query } = useApiState();
+  const { httpsFilter, corsFilter, favoritesFilter, query, category } =
+    useApiState();
   return (
     <>
       <p>Use toggle buttons and search box to filter the table.</p>
       <div className="mb-3 row">
-        <div className="col-md-4">
+        <div className="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
           <div
             id="table-buttons"
-            className="btn-group"
+            className="input-group"
             role="group"
             aria-label="Choose filters to apply to the table."
           >
@@ -127,7 +128,7 @@ function ApiTableControls() {
             <label
               className={`btn btn-outline-${
                 theme === "light" ? "primary" : "info"
-              } btn-check-label`}
+              } btn-check-label rounded-start`}
               htmlFor="cors-toggle"
             >
               CORS
@@ -166,9 +167,27 @@ function ApiTableControls() {
             >
               Favorites
             </label>
+            <select
+              onChange={(e) =>
+                dispatch({ type: "set category", payload: e.target.value })
+              }
+              className={`form-select ${
+                theme === "dark"
+                  ? "text-info bg-dark border-info"
+                  : "text-primary border-primary"
+              }`}
+              id="category-select"
+              aria-label="Category"
+              value={category}
+            >
+              <option value="">Category</option>
+              {categories.map((cat) => (
+                <option key={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
         </div>
-        <div className="col-md pt-3 pt-md-0">
+        <div className="col-md-12 col-lg pt-3 pt-lg-0">
           <input
             id="search-input"
             className="form-control d-inline-block"
@@ -188,23 +207,25 @@ function ApiTableControls() {
 function ApiTable() {
   const dispatch = useApiDispatch();
   const { theme } = useTheme();
-  const { apis, httpsFilter, corsFilter, favoritesFilter, query } =
+  const { apis, httpsFilter, corsFilter, favoritesFilter, query, category } =
     useApiState();
-  const filteredApis = apis
-    .filter(
-      (api: FavoritableApi): boolean =>
-        !(
-          (corsFilter && api.Cors !== CorsSupport.yes) ||
-          (favoritesFilter && !api.isFavorite) ||
-          (httpsFilter && !api.HTTPS)
-        )
-    )
-    .filter((api: FavoritableApi) => {
+  const filteredApis = apis.filter((api: FavoritableApi) => {
+    if (
+      (category && api.Category !== category) ||
+      (corsFilter && api.Cors !== CorsSupport.yes) ||
+      (favoritesFilter && !api.isFavorite) ||
+      (httpsFilter && !api.HTTPS)
+    ) {
+      return false;
+    }
+    if (query) {
       const lCaseQuery = query.toLowerCase();
       return Object.values(api)
         .filter((v) => typeof v === "string")
         .some((v) => v.toLowerCase().includes(lCaseQuery));
-    });
+    }
+    return true;
+  });
 
   const handleToggleFavorite = (api: FavoritableApi) => {
     if (favorites.has(api.Link)) {
@@ -265,7 +286,7 @@ function TableRow({ api, onToggleFavorite }: TableRowProps) {
       <td>
         <a href={Link}>{API}</a>
       </td>
-      <td>{Category}</td>
+      <td data-testid="category-cell">{Category}</td>
       <td>{Description}</td>
       <td>{Auth}</td>
       <td>
